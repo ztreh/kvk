@@ -48,6 +48,17 @@
                             </ul>
                         </li>
                         <li>
+                            <a href="#"><i class="fa fa-hand-o-right nav_icon"></i>Labour Management<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{url('/labour/create')}}">Register New Labour</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('/labour')}}">Labour List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
                             <a href="#"><i class="fa fa-hand-o-right nav_icon"></i>Leave Management<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>

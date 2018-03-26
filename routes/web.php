@@ -26,6 +26,8 @@ Route::group(['middleware' => ['auth']], function()
 	Route::resource('attendance', 'AttendanceController');
 	Route::resource('commision', 'CommissionController');
 	Route::resource('servicecommision', 'ServiceCenterController');
+	Route::resource('labour', 'LabourController');
+
 	Route::get('serviceCenterCreate', 'CommissionController@serviceCenterCreate');
 	Route::get('getEmployeeNames', 'CommissionController@getEmployeeNames');
 	Route::get('getCategoryNames', 'CommissionController@getCategoryNames');
