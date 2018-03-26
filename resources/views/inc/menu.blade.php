@@ -26,6 +26,15 @@
                             </ul>
                         </li>
                         <li>
+                            <a href="#"><i class="fa fa-hand-o-right nav_icon"></i>Device Management<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{url('/device/create')}}">Register New Device</a>
+                                </li>
+                               
+                            </ul>
+                        </li>
+                        <li>
                             <a href="#"><i class="fa fa-hand-o-right nav_icon"></i>Designation Management<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
@@ -33,6 +42,17 @@
                                 </li>
                                 <li>
                                     <a href="{{url('/designation')}}">Designation List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-hand-o-right nav_icon"></i>Workplace Management<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{url('/workplace/create')}}">Register New Workplace</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('/workplace')}}">Workplace List</a>
                                 </li>
                             </ul>
                         </li>

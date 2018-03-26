@@ -59,13 +59,34 @@ class AutocompleteController extends Controller
         foreach ($tags as $tag) {
             $name=$tag->name.' '.$tag->nic_no;
             $formatted_tags[] = ['id' => $tag->id, 'text' =>$name ];
-
-            // $formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name];
         }
 
         return \Response::json($formatted_tags);
     }
 
+    public function getWorkPlaceList(Request $request)
+    {
+        $term = trim($request->q);
+
+        if (empty($term)) {
+            return \Response::json([]);
+        }
+        $tags = DB::table('work__places')
+                    ->where('name', 'like', '%'.$term.'%')
+                    ->get();
+
+        $formatted_tags = [];
+
+        foreach ($tags as $tag) {
+            $name=$tag->name;
+            $formatted_tags[] = ['id' => $tag->id, 'text' =>$name ];
+        }
+
+        return \Response::json($formatted_tags);
+    }
+
+
+    
     public function getDesignationList(Request $request)
     {
         $term = trim($request->q);

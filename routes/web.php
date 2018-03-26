@@ -27,6 +27,8 @@ Route::group(['middleware' => ['auth']], function()
 	Route::resource('commision', 'CommissionController');
 	Route::resource('servicecommision', 'ServiceCenterController');
 	Route::resource('labour', 'LabourController');
+	Route::resource('workplace', 'WorkPlaceController');
+	Route::resource('device', 'DeviceController');
 
 	Route::get('serviceCenterCreate', 'CommissionController@serviceCenterCreate');
 	Route::get('getEmployeeNames', 'CommissionController@getEmployeeNames');
@@ -36,6 +38,7 @@ Route::group(['middleware' => ['auth']], function()
 	Route::post('/employeeImageUpload', 'EmployeeController@uploadImage');
 	Route::post('/employeeimagedel', 'EmployeeController@employeeImageDelete');
 	Route::get('/searchempname', 'AutocompleteController@searchEmpName');    
+	Route::get('/workpalces', 'AutocompleteController@getWorkPlaceList');    
 	Route::get('/emplist', 'AutocompleteController@getEmployeeNameList');    
 	Route::get('/deslist', 'AutocompleteController@getDesignationList');    
 	Route::get('/salmonthlist', 'AutocompleteController@salaryMonthList');    
