@@ -12,13 +12,6 @@ $(document).ready(function() {
         <div class="graphs">
        <div class="xs">
 <h4>{{$title}} Device</h4>
-@if($errors->any())
-  @foreach($errors->all() as $error)
-    <div class="alert alert-danger">
-      {{ $error }}
-    </div>
-  @endforeach
-@endif
 @if(session('info'))
     <div class="alert alert-success">{{session('info')}}</div>
 @endif 
@@ -31,6 +24,11 @@ $(document).ready(function() {
       <label for="focusedinput" class="col-sm-2 control-label">Device Name</label>
       <div class="col-sm-8">
         <input type="text" class="form-control1" name="name"  id="name" placeholder="Device Name" value="@if(!empty($dvc)){{$dvc->name}} @endif"   />
+        @if ($errors->has('name'))
+            <span class="help-block error_required">
+                <strong>{{$errors->first('name')}}</strong>
+            </span>
+        @endif
       </div>
     </div>
     <div class="form-group">
@@ -41,6 +39,11 @@ $(document).ready(function() {
               <option value="{{$dvc->work_places_id}}" selected="selected">{{$dvc->work_places->name }}</option>
           @endif
         </select>
+        @if ($errors->has('work_places_id'))
+            <span class="help-block error_required">
+                <strong>{{"Workplace is required"}}</strong>
+            </span>
+        @endif
       </div>
     </div>
   </div>
@@ -103,26 +106,8 @@ $(document).ready(function() {
   </div>
   </div>
   <script type="text/javascript">
-    $('#work_places_id').select2({
-        tags: true,
-        placeholder: "Select Workplace Name",
-        minimumInputLength: 1,
-        ajax: {
-            url: '{{url("workpalces")}}',
-            dataType: 'json',
-            data: function (params) {
-                return {
-                    q: $.trim(params.term)
-                };
-            },
-            processResults: function (data) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        }
-    });
+    @include('scripts.workplace_name')
+    
     
   </script>
 @include('inc.footer')

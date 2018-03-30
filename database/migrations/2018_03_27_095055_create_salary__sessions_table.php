@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalaryMonthTable extends Migration
+class CreateSalarySessionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreateSalaryMonthTable extends Migration
      */
     public function up()
     {
-        Schema::create('salary_months', function (Blueprint $table) {
+        Schema::create('salary__sessions', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name')->nullable();
             $table->year('year');
             $table->integer('month');
             $table->date('start_date');
             $table->date('end_date');
-            $table->decimal('budget_allowance', 10, 2);
             $table->tinyInteger('status')->default(0)->comment('0 office 1 site');
             $table->timestamps();
+
+            
         });
     }
 
@@ -32,6 +34,6 @@ class CreateSalaryMonthTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salary_months');
+        Schema::dropIfExists('salary__sessions');
     }
 }

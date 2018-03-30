@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Device;
-use Illuminate\Support\Facades\DB;
-
-class DeviceController extends Controller
+use App\Salary_Session_Type;
+class SalarySessionTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,9 +24,9 @@ class DeviceController extends Controller
     public function create()
     {
         $data['title']="Register";
-        $data['url']="/device";
-        $data['devices']=Device::all();
-        return  view('device.form',$data);
+        $data['url']="/salary_session_type";
+        $data['salary_session_types']=Salary_Session_Type::all();
+        return  view('salary_session_type.form',$data);  
     }
 
     /**
@@ -40,9 +38,9 @@ class DeviceController extends Controller
     public function store(Request $request)
     {
         $this->validateData($request);
-        $device = new Device($request->all());
-        $device->save();
-        return redirect('/device/create')->with('info','Device Added Successfully');
+        $salary_session_type = new Salary_Session_Type($request->all());
+        $salary_session_type->save();
+        return redirect('/salary_session_type/create')->with('info','Salary Session Type Added Successfully');
     }
 
     /**
@@ -64,12 +62,11 @@ class DeviceController extends Controller
      */
     public function edit($id)
     {
-        // echo $id;
-        $data['dvc']=Device::find($id);
+        $data['salary_session_type']=Salary_Session_Type::find($id);
         $data['title']="Modify";
-        $data['devices']=Device::all();
-        $data['url']="/device/".$id;
-        return  view('device.form',$data); 
+        $data['salary_session_types']=Salary_Session_Type::all();
+        $data['url']="/salary_session_type/".$id;
+        return  view('salary_session_type.form',$data); 
     }
 
     /**
@@ -83,10 +80,9 @@ class DeviceController extends Controller
     {
         $this->validateData($request);
 
-        $device = Device::find($id);
-        $device->update($request->all()); 
-        return redirect('/device/create')->with('info','Device Modified Successfully');   
-
+        $salary_session_type = Salary_Session_Type::find($id);
+        $salary_session_type->update($request->all()); 
+        return redirect('/salary_session_type/create')->with('info','Salary Session Type Modified Successfully');
     }
 
     /**
@@ -97,15 +93,15 @@ class DeviceController extends Controller
      */
     public function destroy($id)
     {
-        Device::where('id',$id)->delete();
-        return redirect('/device/create')->with('info','Leave Deleted Successfully');
+        Salary_Session_Type::where('id',$id)->delete();
+        return redirect('/salary_session_type/create')->with('info','Salary Session Type Deleted Successfully'); 
+
     }
 
     public function validateData(Request $request)
     {
       $this->validate(request(),[
         'name' => 'required',
-        'work_places_id' => 'required',
         ]);  
     }
 }

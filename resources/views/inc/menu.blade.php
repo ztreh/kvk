@@ -4,14 +4,42 @@
                     <ul class="nav" id="side-menu">
                        @if(Auth::user()->user_type!="Accountant") 
                         <li>
-                            <a href="#"><i class="fa fa-hand-o-right nav_icon"></i>Salary Month Management<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-hand-o-right nav_icon"></i>Salary Session Management<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="{{url('/salarymonth/create')}}">Register New Salary Month</a>
+                                    <a href="{{url('/salary_session/create')}}">Register New Salary Session</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('/salarymonth')}}">Salary Month List</a>
+                                    <a href="{{url('/salary_session')}}">Salary Session List</a>
                                 </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-hand-o-right nav_icon"></i>Salary Session Type Management<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{url('/salary_session_type/create')}}">Register New Salary Session Type </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-hand-o-right nav_icon"></i>Time Slot Management<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{url('/timeslot/create')}}">Register New Time Slot </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-hand-o-right nav_icon"></i>Workplace Salary Session Management<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{url('/workplace_salary_session/create')}}">Register New Workplace Salary Session </a>
+                                </li>
+                                <li>
+                                    <a href="{{url('/workplace_salary_session')}}">Workplace Salary Session </a>
+                                </li>
+
                             </ul>
                         </li>
                         <li>

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Device;
-use Illuminate\Support\Facades\DB;
+use App\TimeSlot;
 
-class DeviceController extends Controller
+class WorkplaceTimeSlotController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,7 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -26,9 +25,9 @@ class DeviceController extends Controller
     public function create()
     {
         $data['title']="Register";
-        $data['url']="/device";
-        $data['devices']=Device::all();
-        return  view('device.form',$data);
+        $data['url']="/timeslot";
+        $data['workplace_timeslot']=TimeSlot::all();
+        return  view('time_slot.form',$data);
     }
 
     /**
@@ -39,10 +38,13 @@ class DeviceController extends Controller
      */
     public function store(Request $request)
     {
+        // $data['timeslots']=TimeSlot::all();
         $this->validateData($request);
-        $device = new Device($request->all());
-        $device->save();
-        return redirect('/device/create')->with('info','Device Added Successfully');
+        $workplace_timeslot = new WorkplaceTimeSlot($request->all());
+        $workplace_timeslot->save();
+        return redirect('/timeslot/create')->with('info','Workplace Time Slot Added Successfully');
+        
+        // echo $request->name." ".$request->status;
     }
 
     /**
@@ -64,12 +66,7 @@ class DeviceController extends Controller
      */
     public function edit($id)
     {
-        // echo $id;
-        $data['dvc']=Device::find($id);
-        $data['title']="Modify";
-        $data['devices']=Device::all();
-        $data['url']="/device/".$id;
-        return  view('device.form',$data); 
+        //
     }
 
     /**
@@ -81,12 +78,7 @@ class DeviceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validateData($request);
-
-        $device = Device::find($id);
-        $device->update($request->all()); 
-        return redirect('/device/create')->with('info','Device Modified Successfully');   
-
+        //
     }
 
     /**
@@ -97,15 +89,6 @@ class DeviceController extends Controller
      */
     public function destroy($id)
     {
-        Device::where('id',$id)->delete();
-        return redirect('/device/create')->with('info','Leave Deleted Successfully');
-    }
-
-    public function validateData(Request $request)
-    {
-      $this->validate(request(),[
-        'name' => 'required',
-        'work_places_id' => 'required',
-        ]);  
+        //
     }
 }

@@ -11,4 +11,8 @@ class Work_Place extends Model
     public function device() {
         return $this->hasMany('App\Device');
     }
+
+    // public function device() {
+    //     return $this->hasMany('App\Device');
+    // }
 }

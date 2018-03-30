@@ -18,7 +18,7 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('/', 'HomeController@index')->name('home');  
     Route::get('/home', 'HomeController@index')->name('home');
 
-	Route::resource('salarymonth', 'SalaryMonthController');
+	Route::resource('salary_session', 'SalarySessionController');
 	Route::resource('holiday', 'HolidayController');
 	Route::resource('designation', 'DesignationController');
 	Route::resource('employee', 'EmployeeController');
@@ -29,6 +29,25 @@ Route::group(['middleware' => ['auth']], function()
 	Route::resource('labour', 'LabourController');
 	Route::resource('workplace', 'WorkPlaceController');
 	Route::resource('device', 'DeviceController');
+	Route::resource('salary_session_type', 'SalarySessionTypeController');
+	Route::resource('workplace_salary_session', 'SalarySessionWorkPlaceController');
+	Route::resource('timeslot', 'TimeSlotController');
+
+	Route::get('/searchempname', 'AutocompleteController@searchEmpName');    
+	Route::get('/salarysession', 'AutocompleteController@getSalarySessions');    
+	Route::get('/salarysessiontype', 'AutocompleteController@getSalarySessionType');    
+	Route::get('/timeslotname', 'AutocompleteController@getTimeSlotName');    
+	Route::get('/workpalces', 'AutocompleteController@getWorkPlaceList');    
+	Route::get('/salarysession', 'AutocompleteController@getSalarySessions');    
+	Route::get('/salarysessiontype', 'AutocompleteController@getSalarySessionType');    
+	// Route::get('/work_places_id', 'AutocompleteController@getWorkPlaceList');    
+	
+	
+
+	Route::get('/emplist', 'AutocompleteController@getEmployeeNameList');    
+	Route::get('/deslist', 'AutocompleteController@getDesignationList');    
+	Route::get('/salmonthlist', 'AutocompleteController@salaryMonthList');    
+
 
 	Route::get('serviceCenterCreate', 'CommissionController@serviceCenterCreate');
 	Route::get('getEmployeeNames', 'CommissionController@getEmployeeNames');
@@ -37,11 +56,6 @@ Route::group(['middleware' => ['auth']], function()
 	Route::resource('loan', 'LoanController');
 	Route::post('/employeeImageUpload', 'EmployeeController@uploadImage');
 	Route::post('/employeeimagedel', 'EmployeeController@employeeImageDelete');
-	Route::get('/searchempname', 'AutocompleteController@searchEmpName');    
-	Route::get('/workpalces', 'AutocompleteController@getWorkPlaceList');    
-	Route::get('/emplist', 'AutocompleteController@getEmployeeNameList');    
-	Route::get('/deslist', 'AutocompleteController@getDesignationList');    
-	Route::get('/salmonthlist', 'AutocompleteController@salaryMonthList');    
 	
 	Route::get('/viewfreelanceslips', 'SlipController@viewFreelancePaySlips');    
 	Route::post('/viewfreelanceslips', 'SlipController@viewFreelancePaySlips');    

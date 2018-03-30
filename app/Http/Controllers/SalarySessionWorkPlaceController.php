@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Device;
-use Illuminate\Support\Facades\DB;
-
-class DeviceController extends Controller
+use App\SalarySessionWorkPlace;
+class SalarySessionWorkPlaceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +13,8 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        //
+        $data['workplace_salary_sessions']=SalarySessionWorkPlace::all();
+        return  view('salary_session_work_palce.index',$data);
     }
 
     /**
@@ -26,10 +25,11 @@ class DeviceController extends Controller
     public function create()
     {
         $data['title']="Register";
-        $data['url']="/device";
-        $data['devices']=Device::all();
-        return  view('device.form',$data);
+        $data['url']="/workplace_salary_session";
+        // $data['salary_session_types']=Salary_Session_Type::all();
+        return  view('salary_session_work_palce.form',$data);  
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -40,9 +40,10 @@ class DeviceController extends Controller
     public function store(Request $request)
     {
         $this->validateData($request);
-        $device = new Device($request->all());
-        $device->save();
-        return redirect('/device/create')->with('info','Device Added Successfully');
+        $salary_session_work_palce = new SalarySessionWorkPlace($request->all());
+        $salary_session_work_palce->save();
+        return redirect('/workplace_salary_session')->with('info','Workplace  Salary Session Added Successfully');   
+
     }
 
     /**
@@ -64,12 +65,11 @@ class DeviceController extends Controller
      */
     public function edit($id)
     {
-        // echo $id;
-        $data['dvc']=Device::find($id);
+        $data['workplace_salary_session']=SalarySessionWorkPlace::find($id);
         $data['title']="Modify";
-        $data['devices']=Device::all();
-        $data['url']="/device/".$id;
-        return  view('device.form',$data); 
+        // $data['workplace_salary_sessions']=SalarySessionWorkPlace::all();
+        $data['url']="/workplace_salary_session/".$id;
+        return  view('salary_session_work_palce.form',$data); 
     }
 
     /**
@@ -83,10 +83,9 @@ class DeviceController extends Controller
     {
         $this->validateData($request);
 
-        $device = Device::find($id);
-        $device->update($request->all()); 
-        return redirect('/device/create')->with('info','Device Modified Successfully');   
-
+        $salary_session_type = SalarySessionWorkPlace::find($id);
+        $salary_session_type->update($request->all()); 
+        return redirect('/workplace_salary_session/create')->with('info','Workplace Salary Session Modified Successfully');
     }
 
     /**
@@ -97,15 +96,22 @@ class DeviceController extends Controller
      */
     public function destroy($id)
     {
-        Device::where('id',$id)->delete();
-        return redirect('/device/create')->with('info','Leave Deleted Successfully');
+        SalarySessionWorkPlace::where('id',$id)->delete();
+        return redirect('/workplace_salary_session')->with('info','Workplace Salary Session Deleted Successfully'); 
     }
 
     public function validateData(Request $request)
     {
       $this->validate(request(),[
-        'name' => 'required',
         'work_places_id' => 'required',
+        'salary_sessions_id' => 'required',
+        'salary_session_types_id' => 'required',
+        'start_date' => 'required',
+        'end_date' => 'required',
         ]);  
     }
 }
+
+
+
+

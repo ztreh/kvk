@@ -16,7 +16,13 @@ class CreateLabourSkillsTable extends Migration
         Schema::create('labour__skills', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('skill_id');
+            // $table->foreign('skill_id')->references('id')
+            // ->on('skills')->onDelete('cascade');
+            
             $table->integer('labours_id');
+            // $table->foreign('labours_id')->references('id')
+            // ->on('labours')->onDelete('cascade');
+            
             $table->timestamps();
         });
     }

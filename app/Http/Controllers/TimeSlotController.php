@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Device;
-use Illuminate\Support\Facades\DB;
+use App\TimeSlot;
 
-class DeviceController extends Controller
+class TimeSlotController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,7 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -26,9 +25,9 @@ class DeviceController extends Controller
     public function create()
     {
         $data['title']="Register";
-        $data['url']="/device";
-        $data['devices']=Device::all();
-        return  view('device.form',$data);
+        $data['url']="/timeslot";
+        $data['timeslots']=TimeSlot::all();
+        return  view('time_slot.form',$data);
     }
 
     /**
@@ -40,9 +39,21 @@ class DeviceController extends Controller
     public function store(Request $request)
     {
         $this->validateData($request);
-        $device = new Device($request->all());
-        $device->save();
-        return redirect('/device/create')->with('info','Device Added Successfully');
+
+        $timeslot = new TimeSlot($request->all());
+        if(!($timeslot->checkSlotNameExist($request->input('name')))){
+            $timeslot->save();
+            $timeslot_id=$timeslot->id;
+        }else{
+            $timeslot_id=$timeslot->getID($request->input('name'));
+        }
+
+        //pivot
+
+
+        //time slot time
+
+        return redirect('/timeslot/create')->with('info','Time Slot Added Successfully');
     }
 
     /**
@@ -53,7 +64,7 @@ class DeviceController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -64,12 +75,11 @@ class DeviceController extends Controller
      */
     public function edit($id)
     {
-        // echo $id;
-        $data['dvc']=Device::find($id);
+        $data['timeslot']=TimeSlot::find($id);
         $data['title']="Modify";
-        $data['devices']=Device::all();
-        $data['url']="/device/".$id;
-        return  view('device.form',$data); 
+        $data['timeslots']=TimeSlot::all();
+        $data['url']="/timeslot/".$id;
+        return  view('time_slot.form',$data);
     }
 
     /**
@@ -83,10 +93,9 @@ class DeviceController extends Controller
     {
         $this->validateData($request);
 
-        $device = Device::find($id);
-        $device->update($request->all()); 
-        return redirect('/device/create')->with('info','Device Modified Successfully');   
-
+        $timeslot = TimeSlot::find($id);
+        $timeslot->update($request->all()); 
+        return redirect('/timeslot/create')->with('info','Time Slot Modified Successfully');
     }
 
     /**
@@ -97,14 +106,17 @@ class DeviceController extends Controller
      */
     public function destroy($id)
     {
-        Device::where('id',$id)->delete();
-        return redirect('/device/create')->with('info','Leave Deleted Successfully');
+        TimeSlot::where('id',$id)->delete();
+        return redirect('/timeslot/create')->with('info','Time Slot Deleted Successfully');
     }
 
     public function validateData(Request $request)
     {
       $this->validate(request(),[
         'name' => 'required',
+        'start_time' => 'required',
+        'end_time' => 'required',
+        'status' => 'required',
         'work_places_id' => 'required',
         ]);  
     }

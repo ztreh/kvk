@@ -86,7 +86,6 @@ class AutocompleteController extends Controller
     }
 
 
-    
     public function getDesignationList(Request $request)
     {
         $term = trim($request->q);
@@ -106,4 +105,61 @@ class AutocompleteController extends Controller
 
         return \Response::json($formatted_tags);
     }
+
+    public function getSalarySessions(Request $request)
+    {
+        $term = trim($request->q);
+
+        if (empty($term)) {
+            return \Response::json([]);
+        }
+        $tags = DB::table('salary__sessions')
+                    ->where('name', 'like', '%'.$term.'%')
+                    ->get();
+
+        $formatted_tags = [];
+
+        foreach ($tags as $tag) {
+            $formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
+    
+    public function getSalarySessionType(Request $request)
+    {
+        $term = trim($request->q);
+
+        if (empty($term)) {
+            return \Response::json([]);
+        }
+        $tags = DB::table('salary__session__types')
+                    ->where('name', 'like', '%'.$term.'%')
+                    ->get();
+
+        $formatted_tags = [];
+
+        foreach ($tags as $tag) {
+            $formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
+    
+    public function getTimeSlotName(Request $request)
+    {
+        $term=$request->term;
+        $result=array();
+        $time_slots = DB::table('time_slots')
+                    ->where('name', 'like', '%'.$term.'%')
+                    ->get();
+        foreach ($time_slots as $emp) {
+           array_push($result, $emp->name) ;
+        }
+        return   $result;   
+    }
+
+
+ 
+
 }
