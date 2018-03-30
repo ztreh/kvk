@@ -48,10 +48,13 @@ class TimeSlotController extends Controller
             $timeslot_id=$timeslot->getID($request->input('name'));
         }
 
-        //pivot
-
-
         //time slot time
+        $time_slot_time=new TimeSlotTime;
+        
+
+
+        //pivot
+        $workplace_timeslot=new WorkplaceTimeSlot;
 
         return redirect('/timeslot/create')->with('info','Time Slot Added Successfully');
     }
