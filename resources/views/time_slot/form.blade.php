@@ -1,26 +1,15 @@
 @include('inc.header')
 @include('inc.menu')
 <script type="text/javascript">
+@include('scripts.start_time')
+@include('scripts.end_time')
+
 $(document).ready(function() {
     $('#example').DataTable( );
 } );
-$(function() {
-    $("#start_time").timepicki({
-      show_meridian:false,
-      max_hour_value:24,
-      min_hour_value:0
-    });
-});
-$(function() {
-    $("#end_time").timepicki({
-      show_meridian:false,
-      max_hour_value:24,
-      min_hour_value:0
-    });
-});
 
 $( function() {
-  $( "#name" ).autocomplete({
+  $("#name").autocomplete({
     source: '{{url("timeslotname")}}'
   });
 } );
@@ -46,8 +35,8 @@ $( function() {
       <label for="focusedinput" class="col-sm-2 control-label">Workplace Name <span class="error_required"><strong>*</strong></span></label>
       <div class="col-sm-8">
         <select class="form-control1 js-example-basic-single" name="work_places_id"  id="work_places_id">
-          @if(!empty($workplace_salary_session))
-              <option value="{{$workplace_salary_session->work_places_id}}" selected="selected">{{$workplace_salary_session->work_places->name }}</option>
+          @if(!empty($timeslot))
+              <option value="{{$timeslot->workplace__time__slot->work_places->id}}" selected="selected">{{$timeslot->workplace__time__slot->work_places->name }}</option>
           @endif
         </select>
         
@@ -61,7 +50,7 @@ $( function() {
     <div class="form-group">
       <label for="focusedinput" class="col-sm-2 control-label">Time Slot Name<span class="error_required"><strong>*</strong></span></label>
       <div class="col-sm-8">
-        <input type="text" class="form-control1" name="name"  id="name" placeholder="Time Slot Name" value="@if(!empty($timeslot)){{$timeslot->name}} @endif"   />
+        <input type="text" class="form-control1" name="name"  id="name" placeholder="Time Slot Name" value="@if(!empty($timeslot)){{$timeslot->workplace__time__slot->time_slots->name}} @endif"   />
         @if ($errors->has('name'))
             <span class="help-block error_required">
                 <strong>{{$errors->first('name')}}</strong>
@@ -95,8 +84,8 @@ $( function() {
       <label for="focusedinput" class="col-sm-2 control-label">Status<span class="error_required"><strong>*</strong></span></label>
       <div class="col-sm-8">
         <select class="form-control1" name="status"  id="status">
-          <option value="1" @if(!empty($timeslot)) selected @endif>Active</option>
-          <option value="0" @if(!empty($timeslot)) selected @endif>Inactive</option>
+          <option value="1" @if(!empty($timeslot) && $timeslot->status==1) selected @endif >Active</option>
+          <option value="0" @if(!empty($timeslot) && $timeslot->status==0) selected @endif >Inactive</option>
         </select>
        
         @if ($errors->has('status'))
@@ -124,6 +113,10 @@ $( function() {
     <thead>
       <tr>
         <td><b>Name</b></td>
+        <td><b>Workplace</b></td>
+        <td><b>Start Time</b></td>
+        <td><b>End Time</b></td>
+        <td><b>Status</b></td>
         <td><b>Create Date</b></td>
         <td><b>Edit</b></td>
         <td><b>Delete</b></td>
@@ -131,15 +124,17 @@ $( function() {
     </thead>
     
     <tbody>
-    <?php $count=0; 
-    ?>
-    @if(!empty($timeslots))
-    @foreach($timeslots->all() as $timeslot)
-    <?php 
-    $count++;
-    ?>
+   
+    @if(!empty($timeslotimes))
+
+    @foreach($timeslotimes as $timeslot)
+   
       <tr>
-          <td>{{ucfirst($timeslot->name)}}</td>
+          <td>{{$timeslot->workplace__time__slot->time_slots->name}}</td><!-- name -->
+          <td>{{$timeslot->workplace__time__slot->work_places->name}}</td><!-- end time  -->
+          <td>{{$timeslot->start_time}}</td><!-- start time -->
+          <td>{{$timeslot->end_time}}</td><!-- workplace name -->
+          <td>@if($timeslot->status==0) Inactive @else Active @endif </td><!-- end time  -->
           <td>{{($timeslot->created_at)}}</td>
           <td><a class="btn btn-primary" href='{{ url("timeslot/{$timeslot->id}/edit/") }}'>Edit</a></td>
           <td>

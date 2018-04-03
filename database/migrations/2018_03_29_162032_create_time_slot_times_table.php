@@ -15,7 +15,8 @@ class CreateTimeSlotTimesTable extends Migration
     {
         Schema::create('time_slot_times', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('workplace_time_slot_id');
+            $table->integer('workplace_time_slot_id')->unsigned();
+            // $table->foreign('workplace_time_slot_id')->references('id')->on('workplace__time__slots');
             $table->time('start_time');
             $table->time('end_time');
             $table->tinyInteger('status')->default(0)->comment('1 active 0 inactive');

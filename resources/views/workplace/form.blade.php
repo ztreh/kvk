@@ -1,14 +1,9 @@
 @include('inc.header')
 @include('inc.menu')
 <script>
-  $(function() {
-    $("#start_date").datepicker();
-  });
-  $(function() {
-    $("#end_date").datepicker();
-  });
-   
- </script>
+  @include('scripts.start_date')
+  @include('scripts.end_date')
+</script>
 </div>
             <!-- /.navbar-static-side -->
         </nav>

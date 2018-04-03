@@ -16,7 +16,7 @@ class CreateDevicesTable extends Migration
         Schema::create('devices', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name',100);
-            $table->integer('work_places_id');
+            $table->integer('work_places_id')->unsigned();
             // $table->foreign('work_places_id')->references('id')
             // ->on('work__places')->onDelete('cascade');
             

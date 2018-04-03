@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\TimeSlot;
+use App\TimeSlotTime;
+use App\Workplace_Time_Slots;
 
 class TimeSlotController extends Controller
 {
@@ -26,7 +28,7 @@ class TimeSlotController extends Controller
     {
         $data['title']="Register";
         $data['url']="/timeslot";
-        $data['timeslots']=TimeSlot::all();
+        $data['timeslotimes']=TimeSlotTime::all();
         return  view('time_slot.form',$data);
     }
 
@@ -39,24 +41,10 @@ class TimeSlotController extends Controller
     public function store(Request $request)
     {
         $this->validateData($request);
-
-        $timeslot = new TimeSlot($request->all());
-        if(!($timeslot->checkSlotNameExist($request->input('name')))){
-            $timeslot->save();
-            $timeslot_id=$timeslot->id;
-        }else{
-            $timeslot_id=$timeslot->getID($request->input('name'));
-        }
-
-        //time slot time
-        $time_slot_time=new TimeSlotTime;
+        $this->saveData($request);
         
-
-
-        //pivot
-        $workplace_timeslot=new WorkplaceTimeSlot;
-
-        return redirect('/timeslot/create')->with('info','Time Slot Added Successfully');
+        $data['timeslotimes']=TimeSlotTime::all();
+        return redirect('/timeslot/create')->with('info','Time Slot Added Successfully',$data);
     }
 
     /**
@@ -78,9 +66,9 @@ class TimeSlotController extends Controller
      */
     public function edit($id)
     {
-        $data['timeslot']=TimeSlot::find($id);
+        $data['timeslot']=TimeSlotTime::find($id);
         $data['title']="Modify";
-        $data['timeslots']=TimeSlot::all();
+        $data['timeslotimes']=TimeSlotTime::all();
         $data['url']="/timeslot/".$id;
         return  view('time_slot.form',$data);
     }
@@ -94,11 +82,13 @@ class TimeSlotController extends Controller
      */
     public function update(Request $request, $id)
     {
+         
+        // echo($request->status);
         $this->validateData($request);
+        $this->saveData($request,$id);
+        $data['timeslotimes']=TimeSlotTime::all();
 
-        $timeslot = TimeSlot::find($id);
-        $timeslot->update($request->all()); 
-        return redirect('/timeslot/create')->with('info','Time Slot Modified Successfully');
+        return redirect('/timeslot/create')->with('info','Time Slot Modified Successfully',$data);
     }
 
     /**
@@ -109,7 +99,7 @@ class TimeSlotController extends Controller
      */
     public function destroy($id)
     {
-        TimeSlot::where('id',$id)->delete();
+        TimeSlotTime::where('id',$id)->delete();
         return redirect('/timeslot/create')->with('info','Time Slot Deleted Successfully');
     }
 
@@ -123,4 +113,22 @@ class TimeSlotController extends Controller
         'work_places_id' => 'required',
         ]);  
     }
+
+    public function saveData(Request $request,$id=0)
+    {
+        $timeslot = new TimeSlot($request->all());
+        $timeslot_id=$timeslot->insertData($request);
+
+        $workplace_timeslot=new Workplace_Time_Slots($request->all());
+        $workplace_timeslot_id=$workplace_timeslot->insertData($request,$timeslot_id);
+        
+        if($id>0){
+            $time_slot_time=TimeSlotTime::find($id);
+        }else{
+            $time_slot_time=new TimeSlotTime($request->all());
+        }
+        $time_slot_time->insertData($request,$workplace_timeslot_id,$id);
+        
+    }
+
 }

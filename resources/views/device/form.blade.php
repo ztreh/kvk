@@ -79,7 +79,7 @@ $(document).ready(function() {
     <?php 
     $count++;
     ?>
-      <tr>
+      <tr>  
           <td>{{ucfirst($device->name)}}</td>
           <td>{{ucfirst($device->work_places->name)}}</td>
           <td>{{($device->created_at)}}</td>

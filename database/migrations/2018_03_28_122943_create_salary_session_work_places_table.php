@@ -15,15 +15,15 @@ class CreateSalarySessionWorkPlacesTable extends Migration
     {
         Schema::create('salary_session_work_places', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('work_places_id')->nullable();
+            $table->integer('work_places_id')->unsigned();
             // $table->foreign('work_places_id')->references('id')
             // ->on('work__places')->onDelete('cascade');
             
-            $table->integer('salary_sessions_id')->nullable();
+            $table->integer('salary_sessions_id')->unsigned();
             // $table->foreign('salary_sessions_id')->references('id')
             // ->on('salary__sessions')->onDelete('cascade');
 
-            $table->integer('salary_session_types_id')->nullable();
+            $table->integer('salary_session_types_id')->unsigned();
             // $table->foreign('salary_session_types_id')->references('id')
             // ->on('salary__session__types')->onDelete('cascade');
             $table->date('start_date');

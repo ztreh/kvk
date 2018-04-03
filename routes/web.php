@@ -19,7 +19,7 @@ Route::group(['middleware' => ['auth']], function()
     Route::get('/home', 'HomeController@index')->name('home');
 
 	Route::resource('salary_session', 'SalarySessionController');
-	Route::resource('holiday', 'HolidayController');
+	Route::resource('holiday', 'HolidayWorkplaceController');
 	Route::resource('designation', 'DesignationController');
 	Route::resource('employee', 'EmployeeController');
 	Route::resource('leave', 'LeaveController');
@@ -35,14 +35,11 @@ Route::group(['middleware' => ['auth']], function()
 
 	Route::get('/searchempname', 'AutocompleteController@searchEmpName');    
 	Route::get('/salarysession', 'AutocompleteController@getSalarySessions');    
-	Route::get('/salarysessiontype', 'AutocompleteController@getSalarySessionType');    
+	Route::get('/salarysessiontype', 'AutocompleteController@getSalarySessionType');
 	Route::get('/timeslotname', 'AutocompleteController@getTimeSlotName');    
 	Route::get('/workpalces', 'AutocompleteController@getWorkPlaceList');    
-	Route::get('/salarysession', 'AutocompleteController@getSalarySessions');    
-	Route::get('/salarysessiontype', 'AutocompleteController@getSalarySessionType');    
-	// Route::get('/work_places_id', 'AutocompleteController@getWorkPlaceList');    
-	
-	
+	    
+	//
 
 	Route::get('/emplist', 'AutocompleteController@getEmployeeNameList');    
 	Route::get('/deslist', 'AutocompleteController@getDesignationList');    

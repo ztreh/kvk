@@ -15,8 +15,11 @@ class CreateWorkplaceTimeSlotsTable extends Migration
     {
         Schema::create('workplace__time__slots', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('time_slot_id');
-            $table->integer('work_places_id');
+            $table->integer('time_slot_id')->unsigned();
+            // $table->foreign('time_slot_id')->references('id')->on('time_slots');
+            $table->integer('work_places_id')->unsigned();
+            // $table->foreign('work_places_id')->references('id')->on('work__places');
+
             $table->timestamps();
         });
     }
