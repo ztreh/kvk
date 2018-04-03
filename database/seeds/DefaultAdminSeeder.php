@@ -14,7 +14,8 @@ class DefaultAdminSeeder extends Seeder
         App\User::create([
         	'name'=>'admin',
         	'email'=>'9wimu9@gmail.com',
-        	'password'=>bcrypt('123456')
+        	'password'=>bcrypt('123456'),
+            'value_type'=>'admin'
         ]);
     }
 }
