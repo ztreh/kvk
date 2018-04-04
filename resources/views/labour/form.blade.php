@@ -25,7 +25,7 @@
 
    $( function() {
     $( "#employee_name" ).autocomplete({
-      source: '{{url("searchempname")}}'
+      source: '{{url("autocomplete/searchempname")}}'
     });
   } );
  </script>
@@ -137,7 +137,7 @@
         placeholder: "Select Employee Names for Commision",
         minimumInputLength: 1,
         ajax: {
-            url: '{{url("emplist")}}',
+            url: '{{url("autocomplete/emplist")}}',
             dataType: 'json',
             data: function (params) {
                 return {
@@ -157,7 +157,7 @@
         placeholder: "Select Contact Person Names ",
         minimumInputLength: 1,
         ajax: {
-            url: '{{url("emplist")}}',
+            url: '{{url("autocomplete/emplist")}}',
             dataType: 'json',
             data: function (params) {
                 return {

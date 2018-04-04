@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\LeaveType;
+use App\LeaveEmployee;
 use App\Leave;
-use App\Employee;
-use Illuminate\Support\Facades\DB;
+
 class LeaveController extends Controller
 {
     /**
@@ -16,12 +15,7 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        $leaves = DB::table('leaves')
-            ->join('leave_types', 'leave_types.id', '=', 'leaves.leave_type_id')
-            ->join('employees', 'employees.id', '=', 'leaves.employee_id')
-            ->select('leaves.*', 'leave_types.name as leave_type_name','employees.name as employee_name' )
-            ->get();
-        $data['leaves']=$leaves;
+        $data['leaves']=LeaveEmployee::all();
         return  view('leave.index',$data);
     }
 
@@ -32,7 +26,7 @@ class LeaveController extends Controller
      */
     public function create()
     {
-        $data['leavetypes']=LeaveType::all();
+       
         $data['title']="Register";
         $data['url']="/leave";
         return  view('leave.form',$data);
@@ -46,22 +40,8 @@ class LeaveController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate(request(),[
-            'leave_type' => 'required',
-            'employee_name' => 'required',
-            'from_date' => 'required',
-            'to_date' => 'required',
-        ]);
-
-        
-        $leave=new Leave;
-        $leave->leave_type_id=$request->input('leave_type');
-        $leave->employee_id=getEmployeeID($request->input('employee_name'),"");
-        $leave->from_date=$request->input('from_date');
-        $leave->from_time=($request->input('from_time')!==null) ? $request->input('from_time') : '00:00' ;
-        $leave->to_date=$request->input('to_date');
-        $leave->to_time=($request->input('to_time')!==null) ? $request->input('to_time') : '00:00' ;
-        $leave->save();
+        $this->validateData($request);
+        $this->saveData($request);
         return redirect('/leave')->with('info','Leave Registered Successfully');
     }
 
@@ -84,14 +64,11 @@ class LeaveController extends Controller
      */
     public function edit($id)
     {
-        $data['leavetypes']=LeaveType::all();
-        $data['leave']=Leave::find($id);
-        $data['employee_name']=DB::table('employees')
-                    ->where('id', '=', $data['leave']->employee_id)
-                    ->first();
+        
+        $data['leave']=LeaveEmployee::find($id);
         $data['url']="/leave/".$data['leave']->id;
         $data['title']="Modify";
-        //print_r($data);
+        
         return  view('leave.form',$data);
     }
 
@@ -104,24 +81,8 @@ class LeaveController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate(request(),[
-            'leave_type' => 'required',
-            'employee_name' => 'required',
-            'from_date' => 'required',
-            'to_date' => 'required',
-        ]);
-        $employee_id=DB::table('employees')
-                    ->where('name', '=', $request->input('employee_name'))
-                    ->first();
-        $data=array('leave_type_id'=>$request->input('leave_type'),
-                'employee_id'=>$employee_id->id,
-                'from_date'=>$request->input('from_date'),
-                'to_date'=>$request->input('to_date'),
-                );
-
-        $data['from_time']=($request->input('from_time')!==null) ? $request->input('from_time') : '00:00';
-        $data['to_time']=($request->input('to_time')!==null) ? $request->input('to_time') : '00:00' ;
-        Leave::where('id',$id)->update($data);
+        $this->validateData($request);
+        $this->saveData($request,$id);
         return redirect('/leave')->with('info','Leave Modified Successfully');    
     }
 
@@ -135,6 +96,34 @@ class LeaveController extends Controller
     {
         Leave::where('id',$id)->delete();
         return redirect('/leave')->with('info','Leave Deleted Successfully');
+    }
+
+    public function validateData(Request $request)
+    {
+      $this->validate(request(),[
+        'name' => 'required',
+        'employees_id' => 'required',
+        'start_date' => 'required',
+        'start_time' => 'required',
+        'end_date' => 'required',
+        'end_time' => 'required',
+        'leaves_id' => 'required',
+        ]);  
+    }
+
+
+    public function saveData(Request $request,$id=0)
+    {   
+        $leave=new Leave($request->all());
+        $leaves_id=$leave->insertData($request);
+
+        if($id>0){
+            $leave_employee=LeaveEmployee::find($id);
+        }else{
+            $leave_employee=new LeaveEmployee($request->all());
+        }
+        $leave_employee->insertData($request,$leaves_id,$id);
+        
     }
 
     

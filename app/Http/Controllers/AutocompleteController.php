@@ -10,115 +10,105 @@ use App\SalaryMonth;
 use Illuminate\Support\Facades\DB;
 class AutocompleteController extends Controller
 {
-    public function searchEmpName(Request $request)
-    {
-        $term=$request->term;
-        $result=array();
-        $employee = DB::table('employees')
-                    ->where('name', 'like', '%'.$term.'%')
-                    ->get();
-        foreach ($employee as $emp) {
-           array_push($result, $emp->name) ;
+
+    public function getValue(Request $request)
+    {   
+       
+        $table_name="";
+        $where_column_array="name";
+        $where_condition="like";
+        $return_type=0;
+        
+        switch($this->getURI()){
+            case "/salarysessiontype":
+                $table_name="salary__session__types";
+                $return_type=1;
+                break;
+            case "/salarysession":
+                $table_name="salary__sessions";
+                $return_type=1;
+                break;
+            case "/workpalces":
+                $table_name="work__places";
+                $return_type=1;
+                break;
+            case "/deslist":
+                $table_name="designations";
+                $return_type=1;
+                break;
+            case "/emplist":
+                $table_name="employees";
+                $return_type=1;
+                break;
+            case "/holidayname":
+                $table_name="holidays";
+                $return_type=2;
+                break;
+            case "/leavename":
+                $table_name="leaves";
+                $return_type=2;
+                break;
+            case "/timeslotname":
+                $table_name="time_slots";
+                $return_type=2;
+                break;
+            case "/searchempname":
+                $table_name="time_slots";
+                $return_type=2;
+                break;
+            default:
+                break;
+
         }
-        return   $result;
-    }
 
-    
+        if(isset($request->q)){
+            $where_value=trim($request->q);;
 
-    public function getWorkPlaceList(Request $request)
-    {
-        $term = trim($request->q);
+        }elseif(isset($request->term)){
+            $where_value=$request->term;
 
-        if (empty($term)) {
+        }
+
+        if (empty($where_value)) {
             return \Response::json([]);
         }
-        $tags = DB::table('work__places')
-                    ->where('name', 'like', '%'.$term.'%')
-                    ->get();
+        
 
-        $formatted_tags = [];
+        $tags = DB::table($table_name)
+            ->where($where_column_array, $where_condition, '%'.$where_value.'%')
+            ->get();
 
-        foreach ($tags as $tag) {
-            $name=$tag->name;
-            $formatted_tags[] = ['id' => $tag->id, 'text' =>$name ];
+        if($return_type==1){
+            $formatted_tags = [];
+
+            foreach ($tags as $tag) {
+                $formatted_tags[] = ['id' => $tag->id, 'text' =>$tag->name];
+            }
+
+            return \Response::json($formatted_tags);
+
+        }elseif($return_type==2){
+            $result=array();
+            foreach ($tags as $emp) {
+               array_push($result, $emp->name) ;
+            }
+            return   $result; 
         }
-
-        return \Response::json($formatted_tags);
     }
 
-
-    public function getDesignationList(Request $request)
+    public function getURI()
     {
-        $term = trim($request->q);
-
-        if (empty($term)) {
-            return \Response::json([]);
-        }
-        $tags = DB::table('designations')
-                    ->where('name', 'like', '%'.$term.'%')
-                    ->get();
-
-        $formatted_tags = [];
-
-        foreach ($tags as $tag) {
-            $formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name];
-        }
-
-        return \Response::json($formatted_tags);
-    }
-
-    public function getSalarySessions(Request $request)
-    {
-        $term = trim($request->q);
-
-        if (empty($term)) {
-            return \Response::json([]);
-        }
-        $tags = DB::table('salary__sessions')
-                    ->where('name', 'like', '%'.$term.'%')
-                    ->get();
-
-        $formatted_tags = [];
-
-        foreach ($tags as $tag) {
-            $formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name];
-        }
-
-        return \Response::json($formatted_tags);
-    }
-    
-    public function getSalarySessionType(Request $request)
-    {
-        $term = trim($request->q);
-
-        if (empty($term)) {
-            return \Response::json([]);
-        }
-        $tags = DB::table('salary__session__types')
-                    ->where('name', 'like', '%'.$term.'%')
-                    ->get();
-
-        $formatted_tags = [];
-
-        foreach ($tags as $tag) {
-            $formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name];
-        }
-
-        return \Response::json($formatted_tags);
+        $uri=$_SERVER["REQUEST_URI"];
+        $uri=str_replace("/autocomplete","",$uri);
+        $get_function_name=explode("?", $uri);
+       
+        return $get_function_name[0];
     }
     
-    public function getTimeSlotName(Request $request)
-    {
-        $term=$request->term;
-        $result=array();
-        $time_slots = DB::table('time_slots')
-                    ->where('name', 'like', '%'.$term.'%')
-                    ->get();
-        foreach ($time_slots as $emp) {
-           array_push($result, $emp->name) ;
-        }
-        return   $result;   
-    }
+    
+    
+
+    
 
 
  

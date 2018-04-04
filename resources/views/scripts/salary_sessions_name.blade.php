@@ -3,7 +3,7 @@ $('#salary_sessions_id').select2({
           placeholder: "Select Salary Session",
           minimumInputLength: 1,
           ajax: {
-              url: '{{url("salarysession")}}',
+              url: '{{url("autocomplete/salarysession")}}',
               dataType: 'json',
               data: function (params) {
                   return {

@@ -27,7 +27,6 @@ class TimeSlot extends Model
 
     public function insertData(Request $request)
     {
-      
         if(!($this->checkSlotNameExist($request->input('name')))){
             $this->save();
             $timeslot_id=$this->id;

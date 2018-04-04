@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLeaveTypesTable extends Migration
+class CreateLeavesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateLeaveTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('leave_types', function (Blueprint $table) {
+        Schema::create('leaves', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('name',100);
+            $table->string('duration',150)->nullable();
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ class CreateLeaveTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('leave_types');
+        Schema::dropIfExists('leaves');
     }
 }

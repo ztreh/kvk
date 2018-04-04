@@ -1,38 +1,17 @@
 @include('inc.header')
 @include('inc.menu')
+
 <script>
-  $(function() {
-    $("#from_date").datepicker();
-  });
-  $(function() {
-    $("#to_date").datepicker();
-  });
-  
-</script>
-<script type="text/javascript">
-    $( function() {
-    $( "#employee_name" ).autocomplete({
-      source: '{{url("searchempname")}}'
+  @include('scripts.start_time')
+  @include('scripts.start_date')
+  @include('scripts.end_date')
+  @include('scripts.end_time')
+
+  $( function() {
+    $("#name").autocomplete({
+      source: '{{url("autocomplete/leavename")}}'
     });
   } );
-</script>
-<script type="text/javascript">
-  
- 
-  $(function() {
-    $("#to_time").timepicki({
-      show_meridian:false,
-      max_hour_value:24,
-      min_hour_value:0
-    });
-  });
-  $(function() {
-    $("#from_time").timepicki({
-      show_meridian:false,
-      max_hour_value:24,
-      min_hour_value:0
-    });
-  });
 </script>
 </div>
             <!-- /.navbar-static-side -->
@@ -58,38 +37,42 @@
     <div class="form-group ">
     <label for="focusedinput" class="col-sm-2 control-label">Select Leave Type</label>
       <div class="col-sm-8">
-        <select class="form-control1"  name="leave_type" id="leave_type">
-          <option value="">Select Leave Type</option>
-          @foreach($leavetypes->all() as $leavetype)
-          
-          <option value="{{$leavetype->id}}" @if(!empty($leave) && $leave->leave_type_id==$leavetype->id) selected @endif>{{$leavetype->name}}</option>
-          @endforeach
-
-        </select>
+        <input type="text" class="form-control1" name="name"  id="name" placeholder="Leave Type" value="@if(!empty($leave)){{$leave->holidays->name}} @endif"   />
       </div>
     </div>
-    <div class="form-group ">
+    
+    <div class="form-group">
       <label for="focusedinput" class="col-sm-2 control-label">Employee Name</label>
       <div class="col-sm-8">
-        <input type="text" class="form-control1" name="employee_name"  id="employee_name" placeholder="Name of the employee" value="@if(!empty($employee_name)){{$employee_name->name}} @endif"   />
+        <select class="form-control1 js-example-basic-single" name="employee_name"  id="employee_name">
+          @if(!empty($labour))
+              <option value="{{$labour->employees_id}}"  selected="selected">{{getColumn('employees','name','id',$labour->employees_id) }}</option>
+          @endif
+        </select>
       </div>
     </div>
     <div class="form-group ">
       <label for="focusedinput" class="col-sm-2 control-label">From </label>
       <div class="col-sm-4">
-        <input type="text" class="form-control1" name="from_date"  id="from_date" placeholder="Date" value="@if(!empty($leave)){{$leave->from_date}} @endif"   />
+        <input type="text" class="form-control1" name="start_date"  id="start_date" placeholder="Date" value="@if(!empty($leave)){{$leave->start_date}} @endif"   />
       </div>
       <div class="col-sm-4">
-        <input type="text" class="form-control1" name="from_time"  id="from_time" placeholder="Time" value="@if(!empty($leave)){{$leave->from_time}} @endif"   />
+        <input type="text" class="form-control1" name="start_time"  id="start_time" placeholder="Time" value="@if(!empty($leave)){{$leave->start_time}} @endif"   />
       </div>
     </div>
     <div class="form-group ">
       <label for="focusedinput" class="col-sm-2 control-label">To </label>
       <div class="col-sm-4">
-        <input type="text" class="form-control1" name="to_date"  id="to_date" placeholder="Date" value="@if(!empty($leave)){{$leave->to_date}} @endif"   />
+        <input type="text" class="form-control1" name="end_date"  id="end_date" placeholder="Date" value="@if(!empty($leave)){{$leave->end_date}} @endif"   />
       </div>
       <div class="col-sm-4">
-        <input type="text" class="form-control1" name="to_time"  id="to_time" placeholder="Time" value="@if(!empty($leave)){{$leave->to_time}} @endif"   />
+        <input type="text" class="form-control1" name="end_time"  id="end_time" placeholder="Time" value="@if(!empty($leave)){{$leave->end_time}} @endif"   />
+      </div>
+    </div>
+    <div class="form-group ">
+    <label for="focusedinput" class="col-sm-2 control-label">Remarks</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control1" name="remarks"  id="remarks" placeholder="Remarks" value="@if(!empty($leave)){{$leave->holidays->remarks}} @endif"   />
       </div>
     </div>
   </div>
@@ -109,4 +92,27 @@
       <p><?php// echo $footer_text; ?></p>
   </div>
   </div>
+  <script type="text/javascript">
+    $('#employee_name').select2({
+        tags: true,
+        placeholder: "Select Employee Names for Commision",
+        minimumInputLength: 1,
+        ajax: {
+            url: '{{url("emplist")}}',
+            dataType: 'json',
+            data: function (params) {
+                return {
+                    q: $.trim(params.term)
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        }
+    });
+   
+  </script>
 @include('inc.footer')

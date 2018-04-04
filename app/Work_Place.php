@@ -17,4 +17,8 @@ class Work_Place extends Model
         return $this->hasMany('App\Workplace_Time_Slots');
     }
 
+    public function holiday_workplaces() {
+        return $this->hasMany('App\HolidayWorkplace');
+    }
+
 }	

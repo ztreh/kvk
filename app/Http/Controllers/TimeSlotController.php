@@ -42,7 +42,6 @@ class TimeSlotController extends Controller
     {
         $this->validateData($request);
         $this->saveData($request);
-        
         $data['timeslotimes']=TimeSlotTime::all();
         return redirect('/timeslot/create')->with('info','Time Slot Added Successfully',$data);
     }
@@ -82,12 +81,9 @@ class TimeSlotController extends Controller
      */
     public function update(Request $request, $id)
     {
-         
-        // echo($request->status);
         $this->validateData($request);
         $this->saveData($request,$id);
         $data['timeslotimes']=TimeSlotTime::all();
-
         return redirect('/timeslot/create')->with('info','Time Slot Modified Successfully',$data);
     }
 
