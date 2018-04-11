@@ -10,6 +10,6 @@ class Device extends Model
 
    
     public function work_places() {
-        return $this->belongsTo('App\Work_Place');
+        return $this->belongsTo('App\Work_Place','work_places_id');
     }	
 }

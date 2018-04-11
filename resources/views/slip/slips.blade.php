@@ -47,12 +47,8 @@ $(document).ready(function() {
 {{ csrf_field() }}
  <div class="tab-content">
   <div class="tab-pane active" id="horizontal-form">
-    <div class="form-group ">
-    <label for="focusedinput" class="col-sm-2 control-label">Select Salary Month</label>
-      <div class="col-sm-8">
-        <input type="text" class="form-control1"  name="salary_month" id="salary_month" placeholder="Select Year and Month" value="@if(!empty($salary_month)){{ $salary_month}} @endif"   />
-      </div>
-    </div>
+    @include('common.workplace_salary_month')
+    
   </div>
 </div> 
 

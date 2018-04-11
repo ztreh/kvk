@@ -3,7 +3,7 @@ $('#work_places_id').select2({
           placeholder: "Select Workplace Name",
           minimumInputLength: 1,
           ajax: {
-              url: '{{url("autocomplete/workpalces")}}',
+              url: '{{url("autocomplete/work__places/1")}}',
               dataType: 'json',
               data: function (params) {
                   return {

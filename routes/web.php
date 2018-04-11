@@ -33,17 +33,10 @@ Route::group(['middleware' => ['auth']], function()
 	Route::resource('workplace_salary_session', 'SalarySessionWorkPlaceController');
 	Route::resource('timeslot', 'TimeSlotController');
 
-	Route::get('autocomplete/{name}', 'AutocompleteController@getValue');   
+	Route::get('autocomplete/{name}/{id}', 'AutocompleteController@getValue');   
+	Route::get('/salary_session_work_places', 'AutocompleteController@salarySessionWorkplace');   
 	
-	/*    
-	Route::get('/salarysessiontype', 'AutocompleteController@getSalarySessionType');
-	Route::get('/workpalces', 'AutocompleteController@getWorkPlaceList');  */  
-	    
-	//
-
-	  
-
-
+	
 	Route::get('serviceCenterCreate', 'CommissionController@serviceCenterCreate');
 	Route::get('getEmployeeNames', 'CommissionController@getEmployeeNames');
 	Route::get('getCategoryNames', 'CommissionController@getCategoryNames');

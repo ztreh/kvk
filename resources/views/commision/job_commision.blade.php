@@ -217,7 +217,7 @@ function setEmployeeCommision(){
       placeholder: "Select Employee Names for Commision",
       minimumInputLength: 1,
       ajax: {
-          url: '{{url("deslist")}}',
+          url: '{{url("autocomplete/designations/1")}}',
           dataType: 'json',
           data: function (params) {
               return {

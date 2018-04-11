@@ -1,20 +1,6 @@
 @include('inc.header')
 @include('inc.menu')
-<script type="text/javascript">
-  $(function() {
-    $( "#salary_month" ).datepicker({
-      changeMonth: true,
-      changeYear: true,
-      dateFormat: 'MM yy',
-      onClose: function(dateText, inst) { 
-            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-        },
-      beforeShow: function(input, inst) {
-        $('#ui-datepicker-div').addClass('hide-calendar');
-      }  
-    });
-  });
-</script>
+
 <script type="text/javascript">
      $(function() {
         $("#entry_date").datepicker();
@@ -40,13 +26,7 @@ $(document).ready(function() {
         <div class="col-md-12 graphs">
      <div class="xs">
 <h4>Attendance Details  @if(!empty($start_date)){{ "from ".$start_date}} @endif @if(!empty($end_date)){{ "to ". $end_date}} @endif</h4>
-@if($errors->any())
-  @foreach($errors->all() as $error)
-    <div class="alert alert-danger">
-      {{ $error }}
-    </div>
-  @endforeach
-@endif
+
 @if(session('info'))
     <div class="alert alert-success">{{session('info')}}</div>
 @endif 
@@ -54,12 +34,7 @@ $(document).ready(function() {
 {{ csrf_field() }}
  <div class="tab-content">
   <div class="tab-pane active" id="horizontal-form">
-    <div class="form-group ">
-    <label for="focusedinput" class="col-sm-2 control-label">Select Salary Month</label>
-      <div class="col-sm-8">
-        <input type="text" class="form-control1"  name="salary_month" id="salary_month" placeholder="Select Year and Month" value="@if(!empty($salary_month)){{ $salary_month}} @endif"   />
-      </div>
-    </div>
+    @include('common.workplace_salary_month')
   </div>
 </div> 
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Rules\SalaryMonthExists;
 use App\Attendance;
 use App\Employee;
+use App\SalarySessionWorkPlace;
+
 class AttendanceController extends Controller
 {
     /**
@@ -180,20 +182,42 @@ class AttendanceController extends Controller
         if ($request->isMethod('post'))
         {
            $this->validate(request(),[
-            'salary_month' => ['required', new SalaryMonthExists]
+            'salary_session_work_places_id' => 'required'
             ]);
-            
-            $dates=getStartAndEndDateOfSalaryMonth($request->input('salary_month'));
-            
-            $data['salary_month_id']=$dates['id'];
-            $data['salary_month']=$request->input('salary_month');
-            $data['start_date']=$dates['start_date'];
-            $data['end_date']=$dates['end_date'];
+            $work_places_salary_session_id=$request->input('salary_session_work_places_id');
+           /* echo $work_places_salary_session_id;
+            $wpss= SalarySessionWorkPlace::find($work_places_salary_session_id);
+            echo count($wpss->work__places->employees())."  **</br>";
+            echo count($wpss->work__places->device)."  **</br>";
+            echo "</br>".($wpss->work__places->employees)."  **</br>";
+            echo "</br>".($wpss->work__places->name)."  **</br>";
+            echo "</br></br></br>".($wpss->work__places->device)."  **</br>";
+ // dd($wpss->work__places->employees->get('id')) ;
 
-            $data['workdays']=getWorkDaysOfSalaryMonth($dates['id']);
-            $data['employees']=Employee::all();;
+foreach ($wpss->work__places->employees as  $employee) {
+    echo "  </br>";
+    // echo $employee->id." ";
+    echo $employee->id." ".$employee->name;
+    echo "  </br>";
+}*/
+            // $dates=getStartAndEndDateOfSalaryMonth($request->input('salary_month'));
+            
+            // $data['salary_month_id']=$dates['id'];
+            // $data['salary_month']=$request->input('salary_month');
+            // $data['start_date']=$dates['start_date'];
+            // $data['end_date']=$dates['end_date'];
+
+            // $data['workdays']=getWorkDaysOfSalaryMonth($dates['id']);
+
+            /*get employees of the selected workplace
+            get start and end date,salary session name of the salary session*/
+
+            // $data['employees']=Employee::all();;
+        }else{
+
+            return  view('attendance.index',$data);
         }
         
-        return  view('attendance.index',$data);
     }
 }
+    

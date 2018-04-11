@@ -10,7 +10,7 @@ $(document).ready(function() {
 
 $( function() {
   $("#name").autocomplete({
-    source: '{{url("autocomplete/timeslotname")}}'
+    source: '{{url("autocomplete/time_slots/2")}}'
   });
 } );
 </script>
@@ -108,7 +108,6 @@ $( function() {
 </div>           
 
 </form>
-
 <table id="example" class="display" width="100%" >
     <thead>
       <tr>

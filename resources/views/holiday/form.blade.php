@@ -8,7 +8,7 @@
 
   $( function() {
     $("#name").autocomplete({
-      source: '{{url("autocomplete/holidayname")}}'
+      source: '{{url("autocomplete/holidays/2")}}'
     });
   } );
 </script>

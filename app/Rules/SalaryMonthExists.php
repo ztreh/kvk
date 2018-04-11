@@ -26,13 +26,11 @@ class SalaryMonthExists implements Rule
      */
     public function passes($attribute, $value)
     {
-        $month=date('n',strtotime($value));
-        $year=date('Y',strtotime($value));
+        
 
-        $salary_month=DB::table('salary_months')
-                    ->where('year', '=', $year)
-                    ->where('month', '=', $month)
-                    ->get();
+        $salary_month=DB::table('salary_session_work_places')
+                    ->where('id', $value)
+                    ->first();
         
         if(count($salary_month)>0){
             return true;

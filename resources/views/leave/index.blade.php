@@ -32,6 +32,8 @@ $(document).ready(function() {
         <td><b>To Date</b></td>
         <td><b>From Time</b></td>
         <td><b>To Time</b></td>
+        <td><b>Remarks</b></td>
+        <td><b>Create Date</b></td>
         <td><b>Edit</b></td>
         <td><b>Delete</b></td>
       </tr>
@@ -45,12 +47,14 @@ $(document).ready(function() {
     $count++;
     ?>
       <tr>
-          <td>{{ucfirst($leave->leave_type_name)}}</td>
-          <td>{{$leave->employee_name}}</td>
-          <td>{{$leave->from_date}}</td>
-          <td>{{$leave->to_date}}</td>
-          <td>{{$leave->from_time}}</td>
-          <td>{{$leave->to_time}}</td>
+          <td>{{ucfirst($leave->leaves->name)}}</td>
+          <td>{{$leave->employees->name}}</td>
+          <td>{{$leave->start_date}}</td>
+          <td>{{$leave->end_date}}</td>
+          <td>{{$leave->start_time}}</td>
+          <td>{{$leave->end_time}}</td>
+          <td>{{$leave->remarks}}</td>
+          <td>{{$leave->created_at}}</td>
           <td><a class="btn btn-primary" href='{{ url("leave/{$leave->id}/edit/") }}'>Edit</a></td>
           <td>
               <form action="{{url('leave', [$leave->id])}}" method="POST">

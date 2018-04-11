@@ -3,7 +3,7 @@
           placeholder: "Select Salary Session Types",
           minimumInputLength: 1,
           ajax: {
-              url: '{{url("autocomplete/salarysessiontype")}}',
+              url: '{{url("autocomplete/salary__session__types/1")}}',
               dataType: 'json',
               data: function (params) {
                   return {

@@ -23,7 +23,7 @@ $(document).ready(function() {
     <thead>
       <tr>
         <td><b>Employee Name</b></td>
-        <td><b>Salary Month</b></td>
+        <td><b>Workplace Salary Session</b></td>
         <td><b>Advance Amount</b></td>
         <td><b>Create Date</b></td>
         <td><b>Print</b></td>
@@ -33,22 +33,21 @@ $(document).ready(function() {
     </thead>
     
     <tbody>
-    <?php $count=0; 
-    ?>
-    @foreach($advances->all() as $advance)
+    
+    @foreach($advances as $advance)
     <?php 
-    $count++;
+    $id=$advance['id'];
     ?>
       <tr>
-          <td>{{getColumn('employees','name','id',$advance->employee_id)." ".getColumn('employees','nic_no','id',$advance->employee_id)  }}</td>
-          <td>{{date("F", strtotime("2001-" .$advance->month. "-01")).' '.$advance->year}}</td>
-          <td>{{($advance->advance_amount)}}</td>
-          <td>{{($advance->created_at)}}</td>
-          <td><a class="btn btn-warning" href='{{ url("advance/{$advance->id}") }}'>Print</a></td>
-          <td><a class="btn btn-primary" href='{{ url("advance/{$advance->id}/edit/") }}'>Edit</a></td>
+          <td>{{$advance['employee_name']}}</td>
+          <td>{{$advance['salary_session_work_place_details']}}</td>
+          <td>{{$advance['advance_amount']}}</td>
+          <td>{{$advance['created_at']}}</td>
+          <td><a class="btn btn-warning" href='{{ url("advance/{$id}") }}'>Print</a></td>
+          <td><a class="btn btn-primary" href='{{ url("advance/{$id}/edit/") }}'>Edit</a></td>
           <!-- <i class="fa fa-edit"></i><i class="fa fa-print"></i> -->
           <td>
-              <form action="{{url('advance', [$advance->id])}}" method="POST">
+              <form action="{{url('advance', [$id])}}" method="POST">
                  {{method_field('DELETE')}}
                  {{csrf_field()}}
                  <input type="submit" class="btn btn-danger" value="Delete"/>

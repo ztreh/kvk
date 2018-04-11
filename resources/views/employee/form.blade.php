@@ -33,8 +33,6 @@
       document.getElementById("monthly_salary").disabled = true;
       document.getElementById("per_day_salary").disabled = false;
       document.getElementById("monthly_salary").value = 0;
-
-
     }
    
     // body...
@@ -60,21 +58,36 @@
  <div class="tab-content">
   <div class="tab-pane active" id="horizontal-form">
     <div class="form-group">
-      <label for="focusedinput" class="col-sm-2 control-label">Employee Name</label>
+      <label for="focusedinput" class="col-sm-2 control-label">Employee Full Name</label>
       <div class="col-sm-8">
-        <input type="text" class="form-control1" name="employee_name"  id="employee_name" placeholder="Employee Name" value="@if(!empty($employee)){{$employee->name}} @endif"   />
+        <input type="text" class="form-control1" name="full_name"  id="full_name" placeholder="Employee Name" value="@if(!empty($employee)){{$employee->name}} @endif"   />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="focusedinput" class="col-sm-2 control-label">Employee Name with Initials</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control1" name="name_with_ini"  id="name_with_ini" placeholder="Employee Name with Initials" value="@if(!empty($employee)){{$employee->name}} @endif"   />
       </div>
     </div>
     <div class="form-group">
       <label for="focusedinput" class="col-sm-2 control-label">Birth Day</label>
       <div class="col-sm-8">
-        <input type="text" class="form-control1" name="birth_day"  id="birth_day" placeholder="Birth Day" value="@if(!empty($employee)){{$employee->birth_day}} @endif"   />
+        <input type="text" class="form-control1" name="dob"  id="dob" placeholder="Birth Day" value="@if(!empty($employee)){{$employee->dob}} @endif"   />
       </div>
     </div>
     <div class="form-group">
-      <label for="focusedinput" class="col-sm-2 control-label">Current Address </label>
+      <label for="focusedinput" class="col-sm-2 control-label">Gender</label>
       <div class="col-sm-8">
-        <input type="text" class="form-control1" name="address_current"  id="address_current" placeholder="Current Address " value="@if(!empty($employee)){{$employee->address_current}} @endif"   />
+        <select class="form-control1"  name="gender" id="gender">
+          <option value="0" @if(!empty($employee) && $employee->gender==0) selected @endif>Female</option>
+          <option value="1" @if(!empty($employee) && $employee->gender==1) selected @endif>Male</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="focusedinput" class="col-sm-2 control-label">Address</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control1" name="address"  id="address" placeholder="Address" value="@if(!empty($employee)){{$employee->address}} @endif"   />
       </div>
     </div>
     <div class="form-group">
@@ -84,15 +97,15 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="focusedinput" class="col-sm-2 control-label">Telephone No 1</label>
+      <label for="focusedinput" class="col-sm-2 control-label">Telephone No</label>
       <div class="col-sm-8">
-        <input type="text" class="form-control1" name="telephone_no_1"  id="telephone_no_1" placeholder="Telephone No 1" value="@if(!empty($employee)){{$employee->telephone_no_1}} @endif"   />
+        <input type="text" class="form-control1" name="tp_home"  id="tp_home" placeholder="Telephone No" value="@if(!empty($employee)){{$employee->tp_home}} @endif"   />
       </div>
     </div>
     <div class="form-group">
-      <label for="focusedinput" class="col-sm-2 control-label">Telephone No 2</label>
+      <label for="focusedinput" class="col-sm-2 control-label">Mobile No </label>
       <div class="col-sm-8">
-        <input type="text" class="form-control1" name="telephone_no_2"  id="telephone_no_2" placeholder="Telephone No 2" value="@if(!empty($employee)){{$employee->telephone_no_2}} @endif"   />
+        <input type="text" class="form-control1" name="tp_mobile"  id="tp_mobile" placeholder="Mobile No " value="@if(!empty($employee)){{$employee->tp_mobile}} @endif"   />
       </div>
     </div>
     <div class="form-group">
@@ -127,12 +140,28 @@
     <div class="form-group">
     <label for="focusedinput" class="col-sm-2 control-label">Select Employee Designation</label>
       <div class="col-sm-8">
-        <select class="form-control1"  name="employee_designation" id="employee_designation">
+        <select class="form-control1"  name="designation_id" id="designation_id">
           <option value="">Select Employee Designation</option>
           @foreach($designations->all() as $designation)
             <option value="{{$designation->id}}" @if(!empty($employee) && $employee->designation_id==$designation->id) selected @endif>{{$designation->name}}</option>
           @endforeach
         </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="focusedinput" class="col-sm-2 control-label">Workplace Name</label>
+      <div class="col-sm-8">
+        <select class="form-control1 js-example-basic-single" name="work_places_id"  id="work_places_id">
+          @if(!empty($holiday))
+              <option value="{{$holiday->work_places->id}}" selected="selected">{{$holiday->work_places->name }}</option>
+          @endif
+        </select>
+        
+        @if ($errors->has('work_places_id'))
+            <span class="help-block error_required">
+                <strong>Enter Workplace Name</strong>
+            </span>
+        @endif
       </div>
     </div>
     <div class="form-group">
@@ -173,6 +202,22 @@
       <label for="focusedinput" class="col-sm-2 control-label">Daily Salary</label>
       <div class="col-sm-8">
         <input type="text" class="form-control1" name="per_day_salary"  id="per_day_salary" placeholder="Daily Salary" value="@if(!empty($employee)){{$employee->per_day_salary}} @endif"   />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="focusedinput" class="col-sm-2 control-label">Salary Session Type <span class="error_required"><strong>*</strong></span></label>
+      <div class="col-sm-8">
+        <select class="form-control1 js-example-basic-single" name="salary_session_types_id"  id="salary_session_types_id" >
+          @if(!empty($workplace_salary_session))
+              <option value="{{$workplace_salary_session->salary_session_types_id}}" selected="selected">{{getColumn('salary__session__types','name','id',$workplace_salary_session->salary_session_types_id) }}</option>
+          @endif
+        </select>
+        
+        @if ($errors->has('salary_session_types_id'))
+            <span class="help-block error_required">
+                <strong>Enter Salary Session Type Name</strong>
+            </span>
+        @endif
       </div>
     </div>
     <div class="form-group">
@@ -217,11 +262,11 @@
         <input type="text" class="form-control1" name="epf_no"  id="epf_no" placeholder="EPF No" value="@if(!empty($employee)){{$employee->epf_no}} @endif"   />
       </div>
     </div>
-    <!-- <div class="form-group">
+    <div class="form-group">
       <label for="focusedinput" class="col-sm-2 control-label">Attendance Incentive</label>
       <div class="col-sm-8">
       </div>
-    </div> -->
+    </div>
         <input type="hidden" class="form-control1" name="attendance_incentive"  id="attendance_incentive" placeholder="Attendance Incentive" value="@if(!empty($employee)){{$employee->attendance_incentive}} @endif"   />
     <div class="form-group">
       <label for="focusedinput" class="col-sm-2 control-label">Allowance Per Day</label>
@@ -260,4 +305,8 @@
       <p><?php //echo $footer_text; ?></p>
   </div>
   </div>
+  <script type="text/javascript">
+    @include('scripts.workplace_name')
+    @include('scripts.salary_session_type_name')
+  </script>
 @include('inc.footer')

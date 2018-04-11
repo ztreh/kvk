@@ -14,6 +14,10 @@ class Leave extends Model
         return $this->hasMany('App\LeaveEmployee','leaves_id');
     }
 
+    public function employees() {
+        return $this->belongsToMany('App\Employee');
+    }
+
      public function checkLeaveExist($name='')
     {
     	return Leave::where('name', $name)->exists(); 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Employee;
-use App\SalaryMonth;
+use App\Salary_Session;
 use App\Working_day;
 use App\Loan;
 
@@ -22,7 +22,7 @@ class ReportController extends Controller
         }
 		$data['years']=$this->getYears();
 		$data['search_year']=$year;
-        $data['salarymonths']=SalaryMonth::where('year','=',$year)->get();
+        $data['salarymonths']=Salary_Session::where('year','=',$year)->get();
 		$data['employees']=Employee::where('category_id', '<>', '2')
                 ->where('epf_availability', '=', '1')
                 ->get();
@@ -40,7 +40,7 @@ class ReportController extends Controller
         }
 		$data['years']=$this->getYears();
 		$data['search_year']=$year;
-        $data['salarymonths']=SalaryMonth::where('year','=',$year)->get();
+        $data['salarymonths']=Salary_Session::where('year','=',$year)->get();
 		$data['employees']=Employee::where('category_id','=',2)->get();
 		return view('report.freelance_payment_summury',$data);
 	}
@@ -57,7 +57,7 @@ class ReportController extends Controller
         }
 		$data['years']=$this->getYears();
 		$data['search_year']=$year;
-        $data['salarymonths']=SalaryMonth::where('year','=',$year)->get();
+        $data['salarymonths']=Salary_Session::where('year','=',$year)->get();
 		
 		return view('report.advance_payment_summury',$data);
 	}
@@ -73,7 +73,7 @@ class ReportController extends Controller
         }
 		$data['years']=$this->getYears();
 		$data['search_year']=$year;
-        $data['salarymonths']=SalaryMonth::where('year','=',$year)->get();
+        $data['salarymonths']=Salary_Session::where('year','=',$year)->get();
 		$data['employees']=Employee::all();
 
 		return view('report.attendance_summary',$data);
@@ -104,14 +104,14 @@ class ReportController extends Controller
         }
 		$data['years']=$this->getYears();
 		$data['search_year']=$year;
-        $data['salarymonths']=SalaryMonth::where('year','=',$year)->get();
+        $data['salarymonths']=Salary_Session::where('year','=',$year)->get();
 		$data['employees']=Employee::where('category_id','<>',2)->get();
 		return view('report.monthly_salary_summary',$data);
 	}
 
 	public function getYears()
 	{
-		$year=SalaryMonth::groupby('year')->select('year')->get();
+		$year=Salary_Session::groupby('year')->select('year')->get();
 		return $year;
 	}
     

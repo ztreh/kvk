@@ -1,8 +1,15 @@
 <?php
 use Illuminate\Support\Facades\DB;
 use App\Employee;
+use App\Leave;
 use App\Commision;
 use App\SalaryMonth;
+use App\Work_Place;
+use App\Salary_Session;
+use App\Salary_Session_Type;
+use App\SalarySessionWorkPlace;
+
+
 
 function getDatesFromRange($from_date,$to_date) {
 	$dates = array($from_date);
@@ -12,6 +19,7 @@ function getDatesFromRange($from_date,$to_date) {
     return $dates;
 }
 
+//******no need
 function getStartAndEndDateOfSalaryMonth($salary_month)
 {
 	$dates=array();
@@ -66,6 +74,7 @@ function getEmployeeID($employee_name="",$finget_print_no=""){
     }
 }
 
+//******no need
 function getWorkDayID($salary_month_id,$date)
 {
 	$working_day=DB::table('working_days')
@@ -81,6 +90,8 @@ function getWorkDayID($salary_month_id,$date)
 	
 }
 
+
+//*****change
 function checkAttendanceExists($working_day_id,$employee_id,$date,$time)
 {
 	$attendance=DB::table('attendances')
@@ -95,7 +106,7 @@ function checkAttendanceExists($working_day_id,$employee_id,$date,$time)
         return true;
     }
 }
-
+//******no need
 function getWorkDaysOfSalaryMonth($salary_month_id)
 {
     $days=array();
@@ -107,6 +118,7 @@ function getWorkDaysOfSalaryMonth($salary_month_id)
     }
     return $days;
 }
+
 function getAttendanceEntries($employee,$day,$sal_end_date,$status)
 {
     //status ==1 =>attendance view
@@ -319,7 +331,7 @@ function assignEntryNames($status=0,$arranged_entries=array()){
    
     return $value_assigned_array;
 }
-
+//*****change
 function getOnOffTwoDaysAttendanceEntriesOfTheDay($employee_id,$start_time,$end_time,$working_date)
 {
     $ontimes=array();
@@ -368,11 +380,11 @@ function getOnOffTwoDaysAttendanceEntriesOfTheDay($employee_id,$start_time,$end_
 
 }
 
-function getAttendanceEntriesOfTheDay($employee_id,$date)
+function getAttendanceEntriesOfTheDay($fingerprint_no,$date)
   {
     $entries=array();
-    $entries_of_the_day=DB::table('attendances')
-                    ->where('employee_id', '=', $employee_id)
+    $entries_of_the_day=DB::table('raw_attendances')
+                    ->where('fingerprint_no', '=', $fingerprint_no)
                     ->where('date', '=', $date)
                     ->get();
     foreach ($entries_of_the_day as $entry) {
@@ -384,7 +396,7 @@ function getAttendanceEntriesOfTheDay($employee_id,$date)
     }
     return $entries;
   }  
-
+//*****change
 function IsHolidayEmployee($date,$employee_id)
 {
     $holidays=DB::table('holidays')
@@ -398,7 +410,7 @@ function IsHolidayEmployee($date,$employee_id)
         return false;
     }
 }
-
+//*****change
 function IsHolidayForAll($date)
 {
     $holidays=DB::table('holidays')
@@ -411,7 +423,7 @@ function IsHolidayForAll($date)
         return false;
     }
 }
-
+//*****change
 function IsOnLeave($employee_id,$date)
 {
     $leaves=DB::table('leaves')
@@ -430,17 +442,17 @@ function getTotalLeaves($sal_end_date="",$employee_id=0,$type=0)
 {
     $year = date('Y',strtotime($sal_end_date));
     $date = $year.'-01-01';
-    $total_leaves=DB::table('leaves')
-            ->where('employee_id', '=', $employee_id)
-            ->where('from_date', '>=',$date );
+    $total_leaves=DB::table('leave_employees')
+            ->where('employees_id', '=', $employee_id)
+            ->where('start_date', '>=',$date );
            
     if($type==0){
-        $total_leaves= $total_leaves->where('from_date', '<=',$sal_end_date );
-        $total_leaves= $total_leaves->where('to_date', '<=', $sal_end_date);
+        $total_leaves= $total_leaves->where('start_date', '<=',$sal_end_date );
+        $total_leaves= $total_leaves->where('end_date', '<=', $sal_end_date);
         
     }
     if($type>0){
-       $total_leaves= $total_leaves->where('leave_type_id','=', $type)->where('to_date', '<=', $year.'-12-31');
+       $total_leaves= $total_leaves->where('leaves_id','=', $type)->where('end_date', '<=', $year.'-12-31');
     }
 
     $total_leaves= $total_leaves->get();
@@ -455,17 +467,17 @@ function getTotalLeaves($sal_end_date="",$employee_id=0,$type=0)
     foreach ($total_leaves as $leaves) {
         // print_r($leaves);
         $diffinhours=0;
-      if($leaves->from_date==$leaves->to_date){
-        $from_time=$leaves->from_date.' '.$leaves->from_time;
-        $to_time=$leaves->to_date.' '.$leaves->to_time;
+      if($leaves->start_date==$leaves->end_date){
+        $from_time=$leaves->start_date.' '.$leaves->start_time;
+        $to_time=$leaves->end_date.' '.$leaves->end_time;
         $diffinhours=timeDifferenceInMinutes(strtotime($from_time),strtotime($to_time))/60;
         $total_time_in_hours+=$diffinhours;
       }else{
-        $from_date=$leaves->from_date;
-        $to_date=$leaves->to_date;
+        $from_date=$leaves->start_date;
+        $to_date=$leaves->end_date;
 
-        $starting=$leaves->from_date.' '.$leaves->from_time;
-        $ending=$leaves->to_date.' '.$leaves->to_time;
+        $starting=$leaves->start_date.' '.$leaves->start_time;
+        $ending=$leaves->end_date.' '.$leaves->end_time;
 
         $end_date=$from_date;
         for($i=0;($end_date<=$to_date);$i++){
@@ -566,6 +578,7 @@ function getWorkedDetails($employee,$salary_month_id,$start_date,$end_date){
     // echo " service_commisions ".$service_commisions." total_commision ".$total_commision;
     $total_commision=$service_commisions+$monthly_total_commision;
     $workdetails['slip']=$slip;
+    //*****change
     $workdetails['budget_allowance']=SalaryMonth::find($salary_month_id)->budget_allowance;
     $workdetails['total_commision']= round($total_commision,2);
     $workdetails['total_advance']= getTotalAdvance($salary_month_id,$employee->id);

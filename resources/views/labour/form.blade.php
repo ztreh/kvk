@@ -25,7 +25,7 @@
 
    $( function() {
     $( "#employee_name" ).autocomplete({
-      source: '{{url("autocomplete/searchempname")}}'
+      source: '{{url("autocomplete/employees/2")}}'
     });
   } );
  </script>

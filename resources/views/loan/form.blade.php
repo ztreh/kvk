@@ -142,7 +142,7 @@ function setVal(){
       placeholder: "Select Employee Name ",
       minimumInputLength: 1,
       ajax: {
-          url: '{{url("emplist")}}',
+          url: '{{url("autocomplete/employees/1")}}',
           dataType: 'json',
           data: function (params) {
               return {

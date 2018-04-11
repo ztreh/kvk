@@ -38,13 +38,7 @@
 {{ csrf_field() }}
  <div class="tab-content">
   <div class="tab-pane active" id="horizontal-form">
-    <div class="form-group ">
-    <label for="focusedinput" class="col-sm-2 control-label">Select Salary Month</label>
-      <div class="col-sm-8">
-        <input type="text" class="form-control1"  name="salary_month" id="salary_month" placeholder="Select Year and Month" value=""   />
-      </div>
-    </div>
-   
+    @include('common.workplace_salary_month')
     <div class="form-group ">
     <label for="focusedinput" class="col-sm-2 control-label">Attendance File</label>
       <div class="col-sm-8">
@@ -71,4 +65,5 @@
       <p><?php  //echo $footer_text; ?></p>
   </div>
   </div>
+
 @include('inc.footer')

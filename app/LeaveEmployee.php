@@ -14,6 +14,12 @@ class LeaveEmployee extends Model
     	// belongs to time-slots
     	return $this->belongsTo('App\Leave','leaves_id');
     }
+    
+    public function employees()
+    {
+    	// belongs to time-slots
+    	return $this->belongsTo('App\Employee','employees_id');
+    }
 
     public function insertData(Request $request,$leaves_id,$id=0)
     {

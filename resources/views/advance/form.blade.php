@@ -1,20 +1,6 @@
 @include('inc.header')
 @include('inc.menu')
-<script type="text/javascript">
-  $(function() {
-    $( "#salary_year_and_month" ).datepicker({
-      changeMonth: true,
-      changeYear: true,
-      dateFormat: 'MM yy',
-      onClose: function(dateText, inst) { 
-            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-        },
-      beforeShow: function(input, inst) {
-        $('#ui-datepicker-div').addClass('hide-calendar');
-      }  
-    });
-  }); 
-</script>
+
 </div>
             <!-- /.navbar-static-side -->
         </nav>
@@ -22,15 +8,6 @@
         <div class="graphs">
        <div class="xs">
 <h4>{{$title}} advance</h4>
-@if($errors->any())
-  @foreach($errors->all() as $error)
-    <div class="alert alert-danger">
-      {{ $error }}
-    </div>
-  @endforeach
-@endif
-
-
 <form class="form-horizontal" method="post" action="{{url($url)}}">
   @if( ! empty($advance)) {{method_field('PUT')}} @endif
   {{ csrf_field() }}
@@ -41,22 +18,42 @@
       <label for="focusedinput" class="col-sm-2 control-label">Advance Amount </label>
       <div class="col-sm-8">
         <input type="text" class="form-control1" name="advance_amount"  id="advance_amount" placeholder="Advance Amount" value="@if(!empty($advance)){{$advance->advance_amount}} @endif"   />
+        @if ($errors->has('advance_amount'))
+            <span class="help-block error_required">
+                <strong>{{ $errors->first('advance_amount') }}</strong>
+            </span>
+        @endif
       </div>
     </div>
-    
-    
     <div class="form-group">
-      <label for="focusedinput" class="col-sm-2 control-label">Salary Month</label>
+      <label for="focusedinput" class="col-sm-2 control-label">Workplace Salary Session <span class="error_required"><strong>*</strong></span></label>
       <div class="col-sm-8">
-        <input type="text" class="form-control1" name="salary_year_and_month"  id="salary_year_and_month" placeholder="Salary Month for the advance" value='@if(!empty($salary_month)){{ date("F", strtotime("2001-" .$salary_month->month. "-01"))." ".$salary_month->year  }} @endif'   />
+        <select class="form-control1 js-example-basic-single" name="salary_session_work_places_id"  id="salary_session_work_places_id">
+          @if(!empty($advance))
+              <option value="{{$advance->salary_session_work_places_id}}" selected="selected">{{$advance->salary_session_work_place_details }}</option>
+          @endif
+        </select>
+        
+        @if ($errors->has('salary_session_work_places_id'))
+                <span class="help-block error_required">
+                    <strong>Enter Workplace  Salary Session </strong>
+                </span>
+            @endif
       </div>
     </div>
+
+
     <div class="form-group">
       <label for="focusedinput" class="col-sm-2 control-label">Employee Name </label>
       <div class="col-sm-8">
-        <select class="form-control1 js-example-basic-single" name="employee_name"  id="employee_name" >
-          @if(!empty($advance))<option value="{{$advance->employee_id}}"  selected="selected">{{getColumn('employees','name','id',$advance->employee_id)." ".getColumn('employees','nic_no','id',$advance->employee_id) }}</option>@endif
+        <select class="form-control1 js-example-basic-single" name="employees_id"  id="employees_id" >
+          @if(!empty($advance))<option value="{{$advance->employees_id}}"  selected="selected">{{$advance->employee_name }}</option>@endif
         </select>
+        @if ($errors->has('employees_id'))
+            <span class="help-block error_required">
+                <strong>Employee Name is required </strong>
+            </span>
+        @endif
       </div>
     </div>
   </div>
@@ -74,12 +71,12 @@
 </form>
 
 <script>
-  $('#employee_name').select2({
-       tags: true,
+  $('#employees_id').select2({
+      tags: true,
       placeholder: "Select Employee Name ",
       minimumInputLength: 1,
       ajax: {
-          url: '{{url("emplist")}}',
+          url: '{{url("autocomplete/employees/1")}}',
           dataType: 'json',
           data: function (params) {
               return {
@@ -95,12 +92,13 @@
       }
   });
 
+  @include('scripts.workplace_salary_session')
   
     </script>
   </div>
   </div>
   <div class="copy_layout">
-      <p><?php //echo $footer_text; ?></p>
+      <p></p>
   </div>
   </div>
 @include('inc.footer')

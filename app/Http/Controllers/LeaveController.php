@@ -107,7 +107,7 @@ class LeaveController extends Controller
         'start_time' => 'required',
         'end_date' => 'required',
         'end_time' => 'required',
-        'leaves_id' => 'required',
+        
         ]);  
     }
 
@@ -117,12 +117,13 @@ class LeaveController extends Controller
         $leave=new Leave($request->all());
         $leaves_id=$leave->insertData($request);
 
-        if($id>0){
+        $user->roles()->attach($roleId, ['expires' => $expires]);
+        /*if($id>0){
             $leave_employee=LeaveEmployee::find($id);
         }else{
             $leave_employee=new LeaveEmployee($request->all());
         }
-        $leave_employee->insertData($request,$leaves_id,$id);
+        $leave_employee->insertData($request,$leaves_id,$id);*/
         
     }
 

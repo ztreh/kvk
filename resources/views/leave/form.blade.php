@@ -9,7 +9,7 @@
 
   $( function() {
     $("#name").autocomplete({
-      source: '{{url("autocomplete/leavename")}}'
+      source: '{{url("autocomplete/leaves/2")}}'
     });
   } );
 </script>
@@ -37,16 +37,16 @@
     <div class="form-group ">
     <label for="focusedinput" class="col-sm-2 control-label">Select Leave Type</label>
       <div class="col-sm-8">
-        <input type="text" class="form-control1" name="name"  id="name" placeholder="Leave Type" value="@if(!empty($leave)){{$leave->holidays->name}} @endif"   />
+        <input type="text" class="form-control1" name="name"  id="name" placeholder="Leave Type" value="@if(!empty($leave)){{$leave->leaves->name}} @endif"   />
       </div>
     </div>
     
     <div class="form-group">
       <label for="focusedinput" class="col-sm-2 control-label">Employee Name</label>
       <div class="col-sm-8">
-        <select class="form-control1 js-example-basic-single" name="employee_name"  id="employee_name">
-          @if(!empty($labour))
-              <option value="{{$labour->employees_id}}"  selected="selected">{{getColumn('employees','name','id',$labour->employees_id) }}</option>
+        <select class="form-control1 js-example-basic-single" name="employees_id"  id="employees_id">
+          @if(!empty($leave))
+              <option value="{{$leave->employees->id}}"  selected="selected">{{ $leave->employees->name}}</option>
           @endif
         </select>
       </div>
@@ -72,7 +72,7 @@
     <div class="form-group ">
     <label for="focusedinput" class="col-sm-2 control-label">Remarks</label>
       <div class="col-sm-8">
-        <input type="text" class="form-control1" name="remarks"  id="remarks" placeholder="Remarks" value="@if(!empty($leave)){{$leave->holidays->remarks}} @endif"   />
+        <input type="text" class="form-control1" name="remarks"  id="remarks" placeholder="Remarks" value="@if(!empty($leave)){{$leave->remarks}} @endif"   />
       </div>
     </div>
   </div>
@@ -93,12 +93,12 @@
   </div>
   </div>
   <script type="text/javascript">
-    $('#employee_name').select2({
+    $('#employees_id').select2({
         tags: true,
-        placeholder: "Select Employee Names for Commision",
+        placeholder: "Select Employee Name",
         minimumInputLength: 1,
         ajax: {
-            url: '{{url("emplist")}}',
+            url: '{{url("autocomplete/employees/1")}}',
             dataType: 'json',
             data: function (params) {
                 return {
